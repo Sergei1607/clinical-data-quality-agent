@@ -39,6 +39,11 @@ response has to come from a tool call that runs real SQL against Supabase. This 
 central thing this project demonstrates.
 
 ## Conventions
+- Backend deps are split: `requirements.txt` is runtime only (what the deployed app
+  imports); `requirements-dev.txt` adds the data-loading deps (pandas, pyreadstat) used
+  only by `scripts/load_data.py` and pulls in `requirements.txt` via `-r`. Deploy with
+  `requirements.txt`; load data locally with `requirements-dev.txt`. Keeps the deployed
+  app off heavy dependencies it never uses in production.
 - `.env` holds `DATABASE_URL` and `ANTHROPIC_API_KEY` — never commit, already in .gitignore
 - Supabase free tier pauses after ~1 week of inactivity — needs a dashboard visit to resume;
   document this candidly in the README, same pattern as Project 1's Render cold-start note

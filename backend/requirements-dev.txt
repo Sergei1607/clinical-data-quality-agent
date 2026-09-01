@@ -1,0 +1,7 @@
+# Local development — includes the runtime deps plus the one-time data loader's
+# needs (scripts/load_data.py). The deployed app never runs the loader, so these
+# stay out of requirements.txt.
+-r requirements.txt
+
+pandas
+pyreadstat

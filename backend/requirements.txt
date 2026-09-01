@@ -1,8 +1,9 @@
+# Runtime dependencies — what the deployed backend actually imports to run.
+# Data-loading deps (pandas, pyreadstat) live in requirements-dev.txt instead.
 fastapi
+pydantic
 uvicorn
 sqlalchemy
 psycopg2-binary
-pandas
-pyreadstat
-python-dotenv
 anthropic
+python-dotenv
