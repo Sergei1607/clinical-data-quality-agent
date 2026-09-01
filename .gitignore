@@ -147,6 +147,9 @@ activemq-data/
 # SageMath parsed files
 *.sage.py
 
+# Downloaded SDTM .xpt data (large; re-fetched by backend/scripts/load_data.py)
+backend/data/
+
 # Environments
 .env
 .envrc
