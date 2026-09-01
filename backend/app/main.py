@@ -16,12 +16,13 @@ from sqlalchemy import func, select
 from app.agent import run_chat_turn
 from app.db import ALL_TABLES, get_engine
 
-# Comma-separated list of origins allowed to call this API (e.g. the deployed
-# Vercel frontend URL). Defaults to the local Vite dev server.
-ALLOWED_ORIGINS = [
+# FRONTEND_ORIGINS: comma-separated list of origins allowed to call this API
+# (e.g. the deployed Vercel URL). Defaults to the local Vite dev server so local
+# dev needs no .env entry.
+FRONTEND_ORIGINS = [
     origin.strip()
     for origin in os.environ.get(
-        "ALLOWED_ORIGINS", "http://localhost:5173"
+        "FRONTEND_ORIGINS", "http://localhost:5173"
     ).split(",")
     if origin.strip()
 ]
@@ -30,7 +31,7 @@ app = FastAPI(title="Clinical Data-Quality Reviewer", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
+    allow_origins=FRONTEND_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
