@@ -22,22 +22,22 @@ from sqlalchemy import (
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL")
 
+def get_engine(env_var: str = "DATABASE_URL"):
+    """Create a SQLAlchemy engine from the connection string in `env_var`.
 
-def get_engine():
-    """Create a SQLAlchemy engine from DATABASE_URL.
-
-    Raises a clear error if the env var is missing so failures are obvious
-    rather than a vague connection error later.
+    Defaults to DATABASE_URL (the owner role, used by the loader). Pass
+    env_var="AGENT_DATABASE_URL" for the SELECT-only role — same pattern
+    tools.py uses. Raises a clear error if the chosen var is unset.
     """
-    if not DATABASE_URL:
+    url = os.getenv(env_var)
+    if not url:
         raise RuntimeError(
-            "DATABASE_URL is not set. Copy backend/.env.example to backend/.env "
-            "and fill in your Supabase connection string."
+            f"{env_var} is not set. Copy backend/.env.example to backend/.env "
+            "and fill in your Supabase connection string(s)."
         )
     # pool_pre_ping avoids stale-connection errors after Supabase's idle pause.
-    return create_engine(DATABASE_URL, pool_pre_ping=True, future=True)
+    return create_engine(url, pool_pre_ping=True, future=True)
 
 
 metadata = MetaData()

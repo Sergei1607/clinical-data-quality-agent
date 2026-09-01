@@ -44,8 +44,11 @@ def health():
 
 @app.get("/db/summary")
 def db_summary():
-    """Row count per table — quick check that the loader ran."""
-    engine = get_engine()
+    """Row count per table — quick check that the loader ran.
+
+    Uses the read-only role: this only ever runs SELECT counts.
+    """
+    engine = get_engine(env_var="AGENT_DATABASE_URL")
     counts = {}
     with engine.connect() as conn:
         for table in ALL_TABLES:
