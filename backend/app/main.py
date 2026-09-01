@@ -6,14 +6,35 @@ Exposes:
   POST /chat         - one turn of the Claude tool-use agent (stateless)
 """
 
+import os
+
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy import func, select
 
 from app.agent import run_chat_turn
 from app.db import ALL_TABLES, get_engine
 
+# Comma-separated list of origins allowed to call this API (e.g. the deployed
+# Vercel frontend URL). Defaults to the local Vite dev server.
+ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get(
+        "ALLOWED_ORIGINS", "http://localhost:5173"
+    ).split(",")
+    if origin.strip()
+]
+
 app = FastAPI(title="Clinical Data-Quality Reviewer", version="0.1.0")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/health")

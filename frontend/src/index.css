@@ -1,0 +1,117 @@
+@import 'tailwindcss';
+
+html {
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+}
+
+body {
+  margin: 0;
+  background-color: #f8fafc; /* slate-50 */
+  color: #0f172a; /* slate-900 */
+}
+
+/*
+ * Styling for markdown rendered inside assistant message bubbles. Claude replies
+ * lean heavily on tables and headings, so these need to look deliberate. Scoped
+ * to .md so nothing else on the page is affected.
+ */
+.md {
+  line-height: 1.6;
+}
+.md > :first-child {
+  margin-top: 0;
+}
+.md > :last-child {
+  margin-bottom: 0;
+}
+.md p {
+  margin: 0.5rem 0;
+}
+.md h1,
+.md h2,
+.md h3,
+.md h4 {
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 1rem 0 0.5rem;
+}
+.md h1 {
+  font-size: 1.15rem;
+}
+.md h2 {
+  font-size: 1.05rem;
+}
+.md h3,
+.md h4 {
+  font-size: 0.95rem;
+}
+.md ul,
+.md ol {
+  margin: 0.5rem 0;
+  padding-left: 1.25rem;
+}
+.md li {
+  margin: 0.2rem 0;
+}
+.md strong {
+  font-weight: 600;
+}
+.md code {
+  background: #eef2ff; /* indigo-50 */
+  color: #3730a3; /* indigo-800 */
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+.md pre {
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 0.75rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 0.75rem 0;
+}
+.md pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+}
+.md table {
+  border-collapse: collapse;
+  margin: 0.75rem 0;
+  font-size: 0.82rem;
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+}
+.md th,
+.md td {
+  border: 1px solid #e2e8f0;
+  padding: 0.4rem 0.6rem;
+  text-align: left;
+  white-space: nowrap;
+}
+.md th {
+  background: #f1f5f9;
+  font-weight: 600;
+}
+.md a {
+  color: #4f46e5;
+  text-decoration: underline;
+}
+.md blockquote {
+  border-left: 3px solid #cbd5e1;
+  padding-left: 0.75rem;
+  color: #475569;
+  margin: 0.5rem 0;
+}
+.md hr {
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  margin: 1rem 0;
+}
