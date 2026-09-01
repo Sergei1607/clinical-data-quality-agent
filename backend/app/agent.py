@@ -14,6 +14,7 @@ import json
 import os
 
 import anthropic
+import psycopg2
 from dotenv import load_dotenv
 
 from app.tools import get_summary_stats, run_quality_checks, run_sql_query
@@ -137,6 +138,18 @@ def _execute_tool(name: str, tool_input: dict) -> tuple[str, bool]:
         return json.dumps({"error": f"Unknown tool: {name}"}), True
     try:
         return json.dumps(fn(tool_input), default=str), False
+    except psycopg2.OperationalError:
+        # Connection-level failure - almost always a paused free-tier Supabase
+        # instance. Hand Claude something it can relay, not a stack trace.
+        return (
+            json.dumps(
+                {
+                    "error": "Database unreachable — it may be paused after inactivity; "
+                    "visiting the Supabase dashboard resumes it."
+                }
+            ),
+            True,
+        )
     except (ValueError, KeyError) as e:
         # ValueError: bad SQL / rejected query. KeyError: missing 'query' arg.
         return json.dumps({"error": str(e)}), True

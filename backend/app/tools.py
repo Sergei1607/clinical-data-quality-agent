@@ -117,15 +117,19 @@ def run_sql_query(query: str) -> dict:
     holds exactly the first MAX_ROWS.
 
     Raises ValueError for anything that isn't a single SELECT, or for a SQL error.
+    Connection-level failures (psycopg2.OperationalError) propagate unchanged so
+    callers can tell "your query was bad" apart from "the database is unreachable".
     """
     safe_sql = _validate_select(query)
 
-    try:
-        with _connect() as conn, conn.cursor(cursor_factory=RealDictCursor) as cur:
+    with _connect() as conn, conn.cursor(cursor_factory=RealDictCursor) as cur:
+        try:
             cur.execute(safe_sql)
             fetched = cur.fetchmany(MAX_ROWS + 1)  # +1 lets us detect truncation cheaply
-    except psycopg2.Error as e:
-        raise ValueError(f"SQL error: {str(e).strip()}") from e
+        except psycopg2.OperationalError:
+            raise
+        except psycopg2.Error as e:
+            raise ValueError(f"SQL error: {str(e).strip()}") from e
 
     truncated = len(fetched) > MAX_ROWS
     rows = [_clean_row(r) for r in fetched[:MAX_ROWS]]
